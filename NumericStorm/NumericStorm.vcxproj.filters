@@ -24,6 +24,12 @@
     <ClInclude Include="NumericStorm.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Fitting\Fitting.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fitting\Parameters.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NumericStorm.cpp">
