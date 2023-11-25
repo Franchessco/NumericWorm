@@ -10,19 +10,12 @@ namespace BoundsTesting {
 struct TestBounds :public testing::Test
 {
 public:
-
     // Test data
-
     Bounds<2, int> p1{ 1, 2 };
     Bounds<2> p2{ 1.0, 2.2 };
-
-
     std::array<int, 2> d1{ 1, 2 };
     std::array<double, 2> d2{ 1.0, 2.2 };
-
 };
-
-
 
 TEST_F(TestBounds, constructingBoundsbylist)
 {
@@ -53,6 +46,14 @@ TEST_F(TestBounds, operatorequal)
     EXPECT_EQ(p1, d1);
     EXPECT_EQ(p2, d2);
 }
+TEST_F(TestBounds, operatorequalWithParameters) 
+{
+    Parameters<2,int> param1{ 1,2 };
+    Parameters<2> param2{ 1.0,2.2 };
+
+    EXPECT_EQ(p1,param1);
+    EXPECT_EQ(p2,param2);
+}
 TEST_F(TestBounds, gettingBounds)
 {
     int a1; double a2;
@@ -64,7 +65,6 @@ TEST_F(TestBounds, gettingBounds)
     EXPECT_EQ(a2, t2);
 
 }
-
 TEST_F(TestBounds, settingBounds)
 {
     int t1 = 5; double t2 = 15.8;
@@ -106,6 +106,17 @@ TEST_F(TestBoundsAddSubOverload, compoundAddition)
     EXPECT_NEAR(result[1], p3[1], 0.001);
     EXPECT_NEAR(result2[0], p3_s[0], 0.001);
     EXPECT_NEAR(result2[1], p3_s[1], 0.001);
+}
+TEST(TestParametersAndBoundsAddition, TestParametersAndBoundsAddition) 
+{
+    std::array<double,2> initialValues{ 1,2 };
+    Parameters<2> initialParameters(initialValues);
+    Bounds<2> initialBounds(initialValues);
+    std::array<double,2> expectedValues{ 2,4 };
+
+    initialBounds += initialParameters;
+    EXPECT_EQ(initialBounds, expectedValues);
+
 }
 TEST_F(TestBoundsAddSubOverload, additionWithScalar)
 {

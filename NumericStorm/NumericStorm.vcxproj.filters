@@ -39,6 +39,9 @@
     <ClInclude Include="Fitting\Simplex\SimplexFigure.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Data.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NumericStorm.cpp">

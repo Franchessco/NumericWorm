@@ -15,9 +15,6 @@ namespace TestingParameters{
         std::array<double, 2> d2{ 1.0, 2.2 };
     };
 
-
-
-
     TEST_F(TestParameters, constructingParametersbylist)
     {
         auto a = p1.getParameters();
