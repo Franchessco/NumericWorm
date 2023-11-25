@@ -30,6 +30,15 @@
     <ClInclude Include="Fitting\Parameters.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Fitting\Bounds.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fitting\Simplex\SimplexPoint.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fitting\Simplex\SimplexFigure.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NumericStorm.cpp">

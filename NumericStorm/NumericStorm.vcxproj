@@ -143,8 +143,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Fitting\Bounds.hpp" />
     <ClInclude Include="Fitting\Fitting.hpp" />
     <ClInclude Include="Fitting\Parameters.hpp" />
+    <ClInclude Include="Fitting\Simplex\SimplexFigure.hpp" />
+    <ClInclude Include="Fitting\Simplex\SimplexPoint.hpp" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="NumericStorm.hpp" />
     <ClInclude Include="pch.h" />
