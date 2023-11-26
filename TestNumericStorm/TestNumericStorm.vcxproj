@@ -107,6 +107,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="TestFitting\pch.h" />
     <ClInclude Include="TestFitting\TestingSimplex\pch.h" />
+    <ClInclude Include="TestFitting\TestingSimplex\TestSimpleSimplex\pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp" />
@@ -120,6 +121,7 @@
     <ClCompile Include="TestFitting\TestingSimplex\TestingData.cpp" />
     <ClCompile Include="TestFitting\TestingSimplex\TestingSimplexFigure.cpp" />
     <ClCompile Include="TestFitting\TestingSimplex\TestingSimplexPoint.cpp" />
+    <ClCompile Include="TestFitting\TestingSimplex\TestSimpleSimplex\TestSimpleSimplex.cpp" />
     <ClCompile Include="TestFitting\TestParameters.cpp" />
   </ItemGroup>
   <ItemGroup>

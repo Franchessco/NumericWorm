@@ -19,7 +19,7 @@ struct TestData
 //template<typename T_d>
 //typedef std::vector<T_d>(*model)(std::array<double, 2> param,std::vector<T_d>arguments);
 
-std::vector<double> modelOfLine(Parameters<2> arguments, std::vector<double>& x) {
+std::vector<double> modelOfLine(std::vector<double>& x, Parameters<2> arguments) {
 		size_t s = x.size();
 		std::vector<double> y; y.resize(s);
 		for (size_t i = 0; i < s; ++i)
@@ -38,7 +38,7 @@ double chi2(const std::vector<double>& mother, const std::vector<double>& child)
 
 	};
 
-using model = std::vector<double>(*)(Parameters<2> param, std::vector<double>& args);
+using model = std::vector<double>(*)(std::vector<double>& args, Parameters<2> param);
 using ErrorModel = double(*)(const std::vector<double>& mother, const std::vector<double>& child);
 
 struct CreatingSimpelxPoint :public testing::Test
