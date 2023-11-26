@@ -24,12 +24,12 @@ public:
 
     //template <typename T_d=double>
     std::vector<T_d> calculateData(std::vector<T_d> arguments)
-    {return m_model(this->m_parameters, arguments);}
+    {return m_model(arguments, this->m_parameters);}
 
     double calculateError(const std::vector<double>& mother, const std::vector<double>& child) 
     { return m_errorModel(mother, child); }
 
-    using DataModel = std::vector<T_d>(*)(Parameters<s_p, T_p>param, std::vector<T_d>& args);
+    using DataModel = std::vector<T_d>(*)(std::vector<T_d>& args, Parameters<s_p, T_p>param);
     using ErrorModel = double(*)(const std::vector<T_d>& mother, const std::vector<T_d>& child);
 private:
     double m_error;

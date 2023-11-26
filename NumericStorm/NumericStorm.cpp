@@ -12,6 +12,7 @@ namespace NumericStorm
 void fnNumericStorm()
 {
 	std::cout << "Numeric Storm!" << std::endl;
+
 }
 
 }
