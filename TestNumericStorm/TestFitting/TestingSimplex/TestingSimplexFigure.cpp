@@ -22,6 +22,15 @@ struct SimplexOperation :public testing::Test
 {
 	Bounds<2> minBounds{ 1,1 };
 	Bounds<2> maxBounds{ 3,3 };
-};
+	SimplexPoint<2> trueCentroid{ 2,2 };
 
+	SimplexFigure<3> simplexfigure = SimplexFigure<3>(minBounds, maxBounds);
+};
+TEST_F(SimplexOperation, calculatingCentroid) 
+{
+	SimplexPoint<2> centroid = simplexfigure.calculateCentroid();
+	for (int i = 0; i <2;i++)
+		EXPECT_EQ(centroid[i], trueCentroid[i]);
+
+};
 }

@@ -29,20 +29,20 @@ namespace Fitting
 
         SimplexPoint getCentroid() 
         {
-            if (m_centroid != nullptr)
-                m_centroid = calculateCentroid();
-            return m_centroid;
+            //if (m_centroid == nullptr)
+            //    m_centroid = calculateCentroid();
+            //return m_centroid;
             
         }
-    private:
-        std::array<SimplexPoint, s_p> m_points;
-        SimplexPoint m_centroid;
-    private:
         SimplexPoint calculateCentroid() 
         {
             SimplexPoint centroid;
             return centroid;
         };
+    private:
+        std::array<SimplexPoint, s_p> m_points;
+        SimplexPoint m_centroid;
+    private:
 
 
     };
