@@ -181,8 +181,8 @@ TEST_F(TestSimplexPointAddSubOverload, compoundAddition)
 	}
 TEST_F(TestSimplexPointAddSubOverload, additionWithScalar)
 	{
-		//SimplexPoint<2> p1{ 1,2 }, p2{ 2,3 }, p3{ 3,5 };
-		//SimplexPoint<2> p1_s{ 1,2 }, p2_s{ 2,3 }, p3_s{ -1,-1 };
+		//SimplexPoint<s_p, T_p, T_d><2> p1{ 1,2 }, p2{ 2,3 }, p3{ 3,5 };
+		//SimplexPoint<s_p, T_p, T_d><2> p1_s{ 1,2 }, p2_s{ 2,3 }, p3_s{ -1,-1 };
 		SimplexPoint<2> result = p1, result2 = p1_s, result3 = p2, result4 = p2_s;
 		result = p1 + add;
 		result2 = p1_s - sub;

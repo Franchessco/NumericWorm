@@ -15,10 +15,10 @@ class SimplexPoint :public Parameters<s_p, T_p>
 {
 public:
     template<class ... Args>
-    SimplexPoint(Args ...args)
+    SimplexPoint<s_p, T_p, T_d>(Args ...args)
         :Parameters<s_p, T_p>(args...), m_error(0), m_model(nullptr), m_errorModel(nullptr) {};
 
-    SimplexPoint(std::array<T_p, s_p> parameters)
+    SimplexPoint<s_p, T_p, T_d>(std::array<T_p, s_p> parameters)
         :Parameters<T_p, s_p>(parameters), m_error(0), m_model(nullptr), m_errorModel(nullptr) {};
 
 
