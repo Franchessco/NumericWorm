@@ -18,7 +18,12 @@ TEST_F(SimplexFigureOperation, calculatingCentroid)
 		EXPECT_EQ(centroid[i], trueCentroid[i]);
 };
 TEST_F(SimplexFigureOperation, sortingPoints)
-{
+{ 
+	//TODO add linear model
+	//TODO add real x (5 points) , and true y
+	//TODO check real chi2 that calculated in c++ <- check by brute force in exel 
+	//!	   and copy paste solution
+	//TODO check order of chi2 
 	simplexFigure.sort();
 
 };
