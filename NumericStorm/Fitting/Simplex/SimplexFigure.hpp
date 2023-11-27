@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SimplexPoint.hpp"
+#include <algorithm>
 
 
 namespace NumericStorm 
@@ -38,12 +39,16 @@ namespace Fitting
             centroid /= s_p;
             return centroid;
         };
+        void sort(bool reverseMinToMax = false)
+        {
+            std::sort(m_points.begin(), m_points.end());
+            if (reverseMinToMax)
+                std::reverse(m_points.begin(), m_points.end());
+        }
     private:
         std::array<SimplexPointType, s_p> m_points;
         SimplexPointType m_centroid;
-    private:
-
-
+    
     };
 
 }

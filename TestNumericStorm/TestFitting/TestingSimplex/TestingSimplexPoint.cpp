@@ -162,27 +162,27 @@ TEST_F(TestSimplexPointAddSubOverload, additionBetweenSimplexPoint)
 	{
 		SimplexPoint<2> result = p1 + p2;
 		SimplexPoint<2> result2 = p1_s - p2_s;
+		for(int i =0;i<2;i++)
+		{
+			EXPECT_NEAR(result[i], p3[i], 0.001);
+			EXPECT_NEAR(result2[i], p3_s[i], 0.001);
+		}
 
-		EXPECT_NEAR(result[0], p3[0], 0.001);
-		EXPECT_NEAR(result[1], p3[1], 0.001);
-
-		EXPECT_NEAR(result2[0], p3_s[0], 0.001);
-		EXPECT_NEAR(result2[1], p3_s[1], 0.001);
 	}
 TEST_F(TestSimplexPointAddSubOverload, compoundAddition)
 	{
 		SimplexPoint<2> result = p1, result2 = p1_s;
 		result += p2;
 		result2 -= p2_s;
-		EXPECT_NEAR(result[0], p3[0], 0.001);
-		EXPECT_NEAR(result[1], p3[1], 0.001);
-		EXPECT_NEAR(result2[0], p3_s[0], 0.001);
-		EXPECT_NEAR(result2[1], p3_s[1], 0.001);
+		for (size_t i = 0; i < 2; i++)
+		{
+		EXPECT_NEAR(result[i], p3[i], 0.001);
+		EXPECT_NEAR(result2[i], p3_s[i], 0.001);
+		}
+		
 	}
 TEST_F(TestSimplexPointAddSubOverload, additionWithScalar)
 	{
-		//SimplexPoint<s_p, T_p, T_d><2> p1{ 1,2 }, p2{ 2,3 }, p3{ 3,5 };
-		//SimplexPoint<s_p, T_p, T_d><2> p1_s{ 1,2 }, p2_s{ 2,3 }, p3_s{ -1,-1 };
 		SimplexPoint<2> result = p1, result2 = p1_s, result3 = p2, result4 = p2_s;
 		result = p1 + add;
 		result2 = p1_s - sub;

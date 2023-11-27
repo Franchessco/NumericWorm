@@ -46,6 +46,9 @@ private:
             setToMinBounds(minBounds);
             setToMaxBounds(maxBounds);
         }
+
+        auto operator <=> (const SimplexPoint<s_p, T_p, T_d>& other) const 
+            {return m_error <=> other.m_error;}
     private:
         void setToMinBounds(const Bounds<s_p, T_p> minBounds)
         {
