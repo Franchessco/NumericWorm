@@ -28,7 +28,7 @@ struct SimplexOperation :public testing::Test
 };
 TEST_F(SimplexOperation, calculatingCentroid) 
 {
-	SimplexPoint<2> centroid = simplexfigure.calculateCentroid();
+	SimplexPoint<2> centroid = simplexfigure.getCentroid();
 	for (int i = 0; i <2;i++)
 		EXPECT_EQ(centroid[i], trueCentroid[i]);
 

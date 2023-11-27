@@ -2,6 +2,7 @@
 
 #include "SimplexPoint.hpp"
 
+
 namespace NumericStorm 
 {
 namespace Fitting 
@@ -10,38 +11,36 @@ namespace Fitting
     class SimplexFigure
     {
     public:
-        using SimplexPoint = SimplexPoint<s_b, T_p, T_d>;
-        SimplexFigure(Bounds<s_b, T_p> minBounds, Bounds<s_b, T_p> maxBounds)
+        using SimplexPointType = SimplexPoint<s_b, T_p, T_d>;
+        using BoundsType = Bounds<s_b, T_p>;
+        SimplexFigure(BoundsType minBounds, BoundsType maxBounds)
         {
-            SimplexPoint step = (maxBounds - minBounds)/s_b;
+            SimplexPointType step = (maxBounds - minBounds)/s_b;
             for (int i = 0; i <= s_b; i++)
                 m_points[i] = minBounds + step * i;
 
             m_centroid = calculateCentroid();
         }
-        std::array<SimplexPoint, s_p> getPoints() { return m_points; }
+        std::array<SimplexPointType, s_p> getPoints() { return m_points; }
 
-        SimplexPoint& operator[](int index)
+        SimplexPointType& operator[](int index)
         {
             if (index >= s_p) { return m_points[0]; }
             return m_points[index];
         }
 
-        SimplexPoint getCentroid() 
+        inline SimplexPointType getCentroid() {return m_centroid;}
+        SimplexPointType calculateCentroid() 
         {
-            //if (m_centroid == nullptr)
-            //    m_centroid = calculateCentroid();
-            //return m_centroid;
-            
-        }
-        SimplexPoint calculateCentroid() 
-        {
-            SimplexPoint centroid;
+            SimplexPointType centroid;
+            for (int i = 0; i <= s_b; i++)
+                centroid += m_points[i];
+            centroid /= s_p;
             return centroid;
         };
     private:
-        std::array<SimplexPoint, s_p> m_points;
-        SimplexPoint m_centroid;
+        std::array<SimplexPointType, s_p> m_points;
+        SimplexPointType m_centroid;
     private:
 
 
