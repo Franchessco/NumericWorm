@@ -3,13 +3,14 @@
 void setX(std::vector<double>& vec, double min, int steps, double step);
 
 
-std::vector<double> GaussianModel(const std::vector<double>& x, NumericStorm::Fitting::Parameters<4> param);
+
 int main()
 {
 	using namespace NumericStorm::Fitting;
 	std::vector<double>v1(5);
 	setX(v1, 0, 5, 1);
-	
+	//TODO add Data class 
+	//		it should overload << operator -> reading data from file 	
 					//   mu,   sigma, A, c
 	Parameters<4> trueParameters{4.5, 1.5,  5, 2};
 
@@ -34,15 +35,3 @@ void setX(std::vector<double>& vec, double min, int steps, double step)
 		vec[i] += min + step * i;
 };
 
-std::vector<double> GaussianModel(const std::vector<double> x, NumericStorm::Fitting::Parameters<4> param) 
-{
-	size_t size = x.size();
-	std::vector<double> result(size);
-	for (int i = 0; i < size; i++)
-	{
-		double new_x = pow( ( (x[i] - param[0]) / param[1]),2);
-		result[i] = param[2] * exp(new_x) + param[3];
-	}
-
-	return result;
-}

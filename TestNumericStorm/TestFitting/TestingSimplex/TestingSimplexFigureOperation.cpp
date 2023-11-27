@@ -10,6 +10,8 @@ struct SimplexFigureOperation :public testing::Test
 	SimplexPoint<2> trueCentroid{ 2,2 };
 
 	SimplexFigure<3> simplexFigure = SimplexFigure<3>(minBounds, maxBounds);
+	//TODO add linear model
+	//TODO add chi2 model of error
 };
 TEST_F(SimplexFigureOperation, calculatingCentroid)
 {
@@ -24,19 +26,23 @@ TEST_F(SimplexFigureOperation, sortingPoints)
 	//TODO check real chi2 that calculated in c++ <- check by brute force in exel 
 	//!	   and copy paste solution
 	//TODO check order of chi2 
-	simplexFigure.sort();
+	//simplexFigure.sort();
 
 };
 TEST_F(SimplexFigureOperation, reflectionWorstPoint)
 {
+	//TODO Add test for reflection
 };
 TEST_F(SimplexFigureOperation, expantionWorstPoint)
 {
+	//TODO Add tets for expantion
 };
 TEST_F(SimplexFigureOperation, contractionWorstPoint)
 {
+	//TODO  add test for contraction
 };
 TEST_F(SimplexFigureOperation, shrinkingPoints)
 {
+	//TODO add test for shrinking
 };
 }

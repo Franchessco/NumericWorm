@@ -23,14 +23,18 @@ public:
 
 
     //template <typename T_d=double>
-    std::vector<T_d> calculateData(std::vector<T_d> arguments)
+
+    using vectorPointer = std::shared_ptr<std::vector<T_d>>;
+
+    using DataModel = std::vector<T_d>(*)(const vectorPointer args, Parameters<s_p, T_p>param);
+    using ErrorModel = double(*)(const vectorPointer mother, const std::vector<T_d>& child);
+
+
+    std::vector<T_d> calculateData(const vectorPointer arguments)
     {return m_model(arguments, this->m_parameters);}
 
-    double calculateError(const std::vector<double>& mother, const std::vector<double>& child) 
+    double calculateError(const vectorPointer mother, const std::vector<double>& child) 
     { return m_errorModel(mother, child); }
-
-    using DataModel = std::vector<T_d>(*)(std::vector<T_d>& args, Parameters<s_p, T_p>param);
-    using ErrorModel = double(*)(const std::vector<T_d>& mother, const std::vector<T_d>& child);
 private:
     double m_error;
     DataModel m_model;

@@ -18,28 +18,30 @@ struct TestData
 
 //template<typename T_d>
 //typedef std::vector<T_d>(*model)(std::array<double, 2> param,std::vector<T_d>arguments);
+using vectorPointer = std::shared_ptr<std::vector<double>>;
 
-std::vector<double> modelOfLine(std::vector<double>& x, Parameters<2> arguments) {
-		size_t s = x.size();
+std::vector<double> modelOfLine(const vectorPointer x, Parameters<2> arguments) {
+		size_t s = (*x).size();
 		std::vector<double> y; y.resize(s);
 		for (size_t i = 0; i < s; ++i)
-			y[i] = arguments[0] * x[i] + arguments[1];
+			y[i] = arguments[0] * (*x)[i] + arguments[1];
 		return y;
 	}
-double chi2(const std::vector<double>& mother, const std::vector<double>& child)
+
+double chi2(const vectorPointer mother, const std::vector<double>& child)
 	{
 		size_t s = child.size();
 		std::vector <double> v; v.resize(s);
 
 		for (size_t i = 0; i < s; i++)
-			v[i] = std::pow((mother[i] - child[i]), 2);
+			v[i] = std::pow(((*mother)[i] - child[i]), 2);
 		double error = std::accumulate(v.begin(), v.end(), 0.0);
 		return error;
 
 	};
 
-using model = std::vector<double>(*)(std::vector<double>& args, Parameters<2> param);
-using ErrorModel = double(*)(const std::vector<double>& mother, const std::vector<double>& child);
+using model = std::vector<double>(*)(vectorPointer args, Parameters<2> param);
+using ErrorModel = double(*)(const vectorPointer mother, const std::vector<double>& child);
 
 struct CreatingSimpelxPoint :public testing::Test
 {
@@ -73,6 +75,11 @@ struct ModelAndError : public testing::Test {
 		std::vector<double> x = { 0,1,2,3,4 };
 		std::vector<double> y = { 2,3,4,5,6 };
 		std::vector<double> y1 = { 2.1,3.1,4.1,5.1,6.1 };
+
+		vectorPointer x_ptr= std::make_shared<std::vector<double>>(x);
+		vectorPointer y_ptr = std::make_shared<std::vector<double>>(y);
+		vectorPointer y1_ptr = std::make_shared<std::vector<double>>(y1);
+
 		double trueError = 0.05;
 
 	};
@@ -137,9 +144,9 @@ TEST_F(ModelAndError, testingSettingModelAndError)
 		linearModel.setDataModel(modelOfLine);
 		linearModel.setErrorModel(chi2);
 
-		std::vector<double> calculatedData = linearModel.calculateData(x);
-		double error = linearModel.calculateError(y, calculatedData);
-		double secondError = linearModel.calculateError(y1, calculatedData);
+		std::vector<double> calculatedData = linearModel.calculateData(x_ptr);
+		double error = linearModel.calculateError(y_ptr, calculatedData);
+		double secondError = linearModel.calculateError(y1_ptr, calculatedData);
 		EXPECT_EQ(calculatedData, y);
 		EXPECT_EQ(error, 0);
 		EXPECT_NEAR(secondError, trueError, 0.0001);
