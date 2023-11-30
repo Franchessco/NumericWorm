@@ -5,13 +5,12 @@ using namespace NumericStorm::Fitting;
 namespace TestingSimplexFigure
 {
 
-	struct CreatingsimplexFigure : public testing::Test
-	{
-		Bounds<3> minBounds{ 1, 1, 1 };
-		Bounds<3> maxBounds{ 5,5,5 };
-
-	};
-	TEST_F(CreatingsimplexFigure, CreatingsimplexFigure)
+struct CreatingsimplexFigure : public testing::Test
+{
+	Bounds<3> minBounds{ 1, 1, 1 };
+	Bounds<3> maxBounds{ 5,5,5 };
+};
+TEST_F(CreatingsimplexFigure, CreatingsimplexFigure)
 	{
 		SimplexFigure<4> simplexFigure(minBounds, maxBounds);
 
@@ -19,13 +18,9 @@ namespace TestingSimplexFigure
 		EXPECT_EQ(simplexFigure[3], maxBounds);
 	}
 
+using vectorPointer = std::shared_ptr<std::vector<double>>;
 
-
-	using vectorPointer = std::shared_ptr<std::vector<double>>;
-
-	
-
-	std::vector<double> modelOfLine(const vectorPointer x, Parameters<2> arguments) 
+std::vector<double> modelOfLine(const vectorPointer x, Parameters<2> arguments) 
 	{
 		size_t s = (*x).size();
 		std::vector<double> y; y.resize(s);
@@ -34,7 +29,7 @@ namespace TestingSimplexFigure
 		return y;
 	}
 
-	double chi2(const vectorPointer mother, const std::vector<double>& child)
+double chi2(const vectorPointer mother, const std::vector<double>& child)
 	{
 		size_t s = child.size();
 		std::vector <double> v; v.resize(s);
@@ -45,25 +40,19 @@ namespace TestingSimplexFigure
 		return error;
 	};
 
-	using model = std::vector<double>(*)(vectorPointer args, Parameters<2> param);
-	using ErrorModel = double(*)(const vectorPointer mother, const std::vector<double>& child);
-	
-	struct TestignSettingAndExecutingModel: public testing::Test 
-	{
-		//std::vector<double> xVector{1,2,3,4,5};
-		//std::vector<double> yVector{ 1,2,3,4,5 };
-	
-		Bounds<2> minBounds{1,1};
-		Bounds<2> maxBounds{2,2};
-		model linmodel = modelOfLine;
-		ErrorModel errormodel = chi2;;
+using model = std::vector<double>(*)(vectorPointer args, Parameters<2> param);
+using ErrorModel = double(*)(const vectorPointer mother, const std::vector<double>& child);
 
-		SimplexFigure<3> simplexFigure{ minBounds,maxBounds };
-		//vectorPointer xVectorShared = std::make_unique<std::vector<double>>(xVector);
-		//vectorPointer yVectorShared = std::make_unique<std::vector<double>>(yVector);
-	};
+struct TestignSettingAndExecutingModelThrowingAnError: public testing::Test 
+{
+	Bounds<2> minBounds{1,1};
+	Bounds<2> maxBounds{2,2};
+	model linmodel = modelOfLine;
+	ErrorModel errormodel = chi2;;
+	SimplexFigure<3> simplexFigure{ minBounds,maxBounds };
+};
 
-TEST_F(TestignSettingAndExecutingModel, TestThrowErrorTwoModelsNotSetted) 
+TEST_F(TestignSettingAndExecutingModelThrowingAnError, TestThrowErrorTwoModelsNotSetted) 
 {
 	try 
 	{simplexFigure.sort();}
@@ -73,7 +62,7 @@ TEST_F(TestignSettingAndExecutingModel, TestThrowErrorTwoModelsNotSetted)
 		EXPECT_STREQ("Data and Error no setted model", e.what());
 	}
 }
-TEST_F(TestignSettingAndExecutingModel, TestThrowErrorModelsNotSetted)
+TEST_F(TestignSettingAndExecutingModelThrowingAnError, TestThrowErrorModelsNotSetted)
 {
 	simplexFigure.setDataModel(linmodel);
 	try
@@ -87,7 +76,7 @@ TEST_F(TestignSettingAndExecutingModel, TestThrowErrorModelsNotSetted)
 	}
 }
 
-TEST_F(TestignSettingAndExecutingModel, TestThrowErrorDataModelsNotSetted)
+TEST_F(TestignSettingAndExecutingModelThrowingAnError, TestThrowErrorDataModelsNotSetted)
 {
 	simplexFigure.setErrorModel(errormodel);
 	try
@@ -101,6 +90,40 @@ TEST_F(TestignSettingAndExecutingModel, TestThrowErrorDataModelsNotSetted)
 	}
 }
 
+struct TestignSettingAndExecutingModel : public testing::Test
+{
+	std::vector<double> xVector{1,2,3,4,5};
+	SimplexPoint<2> truePoint{ 1.5,1.5 };
+	std::vector<double> yVector{ 3,4.5,6,7.5,9};
+	vectorPointer xVectorPointer = std::make_unique<std::vector<double>>(xVector);
+	vectorPointer trueYVectorPointer = std::make_unique<std::vector<double>>(yVector);
+
+	std::vector<double> yFor11{ 2,3,4,5,6};
+	std::vector<double> yFor22{ 4,6,8,10,12};
+	std::vector<double> yFor33{ 6,9,12,15,18};
+
+	vectorPointer yFor11Pointer = std::make_shared<std::vector<double>>(yFor11);
+	vectorPointer yFor22Pointer = std::make_shared<std::vector<double>>(yFor22);
+	vectorPointer yFor33Pointer = std::make_shared<std::vector<double>>(yFor33);
+
+	Bounds<2> minBounds{ 1,1 };
+	Bounds<2> maxBounds{ 3,3 };
+	model linmodel = modelOfLine;
+	ErrorModel errormodel = chi2;;
+
+	SimplexFigure<3> simplexFigure{ minBounds,maxBounds };
+};
+TEST_F(TestignSettingAndExecutingModel, checkingErrorModel)
+{
+	simplexFigure.setModels(linmodel, errormodel);
+	simplexFigure.setMotherCharacteristic(trueYVectorPointer);
+	simplexFigure.setArgumentsToCalculatingData(xVectorPointer);
+
+	simplexFigure.calculateErrors();
+
+};
+//TEST_F(TestignSettingAndExecutingModel, checkingDataModel) {};
+//TEST_F(TestignSettingAndExecutingModel, checkingSortingVertex) {};
 }
-		//TODO add test for all possible error messages 
+		
 

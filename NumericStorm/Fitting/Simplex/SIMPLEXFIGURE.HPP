@@ -59,10 +59,6 @@ public:
             std::reverse(m_points.begin(), m_points.end());
         }
 
-    void setMotherCharacteristic(vectorPointer motherCharacterisitcPtr) 
-        {m_motherCharacteristicPtr = motherCharacterisitcPtr;}
-    void setArgumentsToCalculatingData(vectorPointer argumentsToCalculatingModel) 
-        {m_argumentsToCalculatingCharacteristic = argumentsToCalculatingModel;}
     void setModels(model dataModel, ErrorModel errorModel) 
     {
         setDataModel(dataModel); setErrorModel(errorModel); 
@@ -79,6 +75,19 @@ public:
         for (int i = 0; i < s_p; i++)
             m_points[i].setErrorModel(modelToSet);
         m_errorModelSet = true;
+    }
+    void setMotherCharacteristic(vectorPointer motherCharacterisitcPtr) 
+        {m_motherCharacteristicPtr = motherCharacterisitcPtr;}
+    void setArgumentsToCalculatingData(vectorPointer argumentsToCalculatingModel) 
+        {m_argumentsToCalculatingCharacteristic = argumentsToCalculatingModel;}
+    
+    void calculateErrors() 
+    { 
+        // this variable is used because calculateError return double 
+        // and modify internal stage of point, i neeed to store somewhere this data
+        double currentError;
+        for (auto item : m_points)
+            currentError= m_points[i].calculateError();
     }
 private:
     std::array<SimplexPointType, s_p> m_points;

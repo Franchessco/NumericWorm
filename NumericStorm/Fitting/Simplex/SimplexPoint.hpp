@@ -33,8 +33,7 @@ public:
     std::vector<T_d> calculateData( vectorPointer arguments)
     {return m_model(arguments, this->m_parameters);}
 
-    double calculateError( vectorPointer mother, const std::vector<double>& child) 
-    { return m_errorModel(mother, child); }
+    inline double calculateError(vectorPointer mother, const std::vector<double>& child) {m_error = m_errorModel(mother, child);return  m_error;}
 private:
     double m_error;
     model m_model;
