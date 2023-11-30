@@ -26,22 +26,22 @@ public:
 
     using vectorPointer = std::shared_ptr<std::vector<T_d>>;
 
-    using DataModel = std::vector<T_d>(*)(const vectorPointer args, Parameters<s_p, T_p>param);
-    using ErrorModel = double(*)(const vectorPointer mother, const std::vector<T_d>& child);
+    using model = std::vector<T_d>(*)(vectorPointer args, Parameters<s_p, T_p>param);
+    using ErrorModel = double(*)(vectorPointer mother, const std::vector<T_d>& child);
 
 
-    std::vector<T_d> calculateData(const vectorPointer arguments)
+    std::vector<T_d> calculateData( vectorPointer arguments)
     {return m_model(arguments, this->m_parameters);}
 
-    double calculateError(const vectorPointer mother, const std::vector<double>& child) 
+    double calculateError( vectorPointer mother, const std::vector<double>& child) 
     { return m_errorModel(mother, child); }
 private:
     double m_error;
-    DataModel m_model;
+    model m_model;
     ErrorModel m_errorModel;
 
     public:
-        inline void setDataModel(DataModel modelToSet) { m_model = modelToSet; }
+        inline void setDataModel(model modelToSet) { m_model = modelToSet; }
         inline void setErrorModel(ErrorModel modelToSet) { m_errorModel = modelToSet; }
         inline double getError() { return m_error; }
 

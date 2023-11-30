@@ -19,7 +19,7 @@ private:
 	{
 
 		std::string d = dataModel ?  "" : "Data ";
-		std::string a = (dataModel && errorModel) ? "": "and ";
+		std::string a = (dataModel || errorModel) ? "": "and ";
 		std::string e = errorModel ? "" :"Error ";
 		m_message += d + a + e + "no setted model";
 		

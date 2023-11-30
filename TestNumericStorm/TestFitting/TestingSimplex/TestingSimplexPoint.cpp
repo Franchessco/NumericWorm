@@ -37,7 +37,6 @@ double chi2(const vectorPointer mother, const std::vector<double>& child)
 			v[i] = std::pow(((*mother)[i] - child[i]), 2);
 		double error = std::accumulate(v.begin(), v.end(), 0.0);
 		return error;
-
 	};
 
 using model = std::vector<double>(*)(vectorPointer args, Parameters<2> param);
@@ -143,7 +142,8 @@ TEST_F(ModelAndError, testingSettingModelAndError)
 	{
 		linearModel.setDataModel(modelOfLine);
 		linearModel.setErrorModel(chi2);
-
+		
+		//TODO needed to check, another test cas if the model is setted!
 		std::vector<double> calculatedData = linearModel.calculateData(x_ptr);
 		double error = linearModel.calculateError(y_ptr, calculatedData);
 		double secondError = linearModel.calculateError(y1_ptr, calculatedData);
@@ -165,6 +165,7 @@ struct TestSimplexPointMulDivOverload :public testing::Test
 		SimplexPoint<2> p1_d{ 2,4 }, p2_d{ 2,4 };
 		double mull = 2, div = 2;
 	};
+
 TEST_F(TestSimplexPointAddSubOverload, additionBetweenSimplexPoint)
 	{
 		SimplexPoint<2> result = p1 + p2;
