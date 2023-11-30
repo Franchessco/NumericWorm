@@ -17,9 +17,8 @@ public:
     using BoundsType = Bounds<s_b, T_p>;
     using vectorPointer = std::shared_ptr<std::vector<T_d>>;
 
-    using DataModel = std::vector<T_d>(*)(std::vector<T_d>& args, Parameters<s_p, T_p>param);
-    using ErrorModel = double(*)(const vectorPointer mother, const std::vector<T_d>& child);
-
+    using model = std::vector<double>(*)(vectorPointer args, Parameters<2> param);
+    using ErrorModel = double(*)(const vectorPointer mother, const std::vector<double>& child);
 
     SimplexFigure(BoundsType minBounds, BoundsType maxBounds)
         {
@@ -29,8 +28,8 @@ public:
 
             m_centroid = calculateCentroid();
             m_motherCharacteristicPtr = nullptr;
-            dataModelSet = false;
-            errorModelSet = false;
+            m_dataModelSet = false;
+            m_errorModelSet = false;
 
         }
     std::array<SimplexPointType, s_p> getPoints() { return m_points; }
@@ -52,8 +51,8 @@ public:
         };
     void sort(bool reverseMinToMax = false)
         {
-        if (dataModelSet == false || errorModelSet == false)
-            throw NoSettedModelExeption(dataModelSet,errorModelSet);
+        if (m_dataModelSet == false || m_errorModelSet == false)
+            throw NoSettedModelExeption(m_dataModelSet,m_errorModelSet);
         
         std::sort(m_points.begin(), m_points.end());
         if (reverseMinToMax)
@@ -64,28 +63,30 @@ public:
         {m_motherCharacteristicPtr = motherCharacterisitcPtr;}
     void setArgumentsToCalculatingData(vectorPointer argumentsToCalculatingModel) 
         {m_argumentsToCalculatingCharacteristic = argumentsToCalculatingModel;}
-    void setModels(DataModel dataModel, ErrorModel errorModel) 
+    void setModels(model dataModel, ErrorModel errorModel) 
     {
         setDataModel(dataModel); setErrorModel(errorModel); 
-        dataModelSet = true; errorModelSet = true;
+        m_dataModelSet = true; m_errorModelSet = true;
     }
-private:
-    void setDataModel(DataModel modelToSet) 
+    void setDataModel(model modelToSet) 
     {
         for(int i=0; i <s_p;i++)
             m_points[i].setDataModel(modelToSet);
+        m_dataModelSet = true;
     }
     void setErrorModel(ErrorModel modelToSet) 
     {
         for (int i = 0; i < s_p; i++)
             m_points[i].setErrorModel(modelToSet);
+        m_errorModelSet = true;
     }
+private:
     std::array<SimplexPointType, s_p> m_points;
     SimplexPointType m_centroid;
     vectorPointer m_motherCharacteristicPtr;
     vectorPointer m_argumentsToCalculatingCharacteristic;
-    bool dataModelSet;
-    bool errorModelSet;
+    bool m_dataModelSet;
+    bool m_errorModelSet;
 
     };
 
