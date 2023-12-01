@@ -145,8 +145,10 @@ TEST_F(ModelAndError, testingSettingModelAndError)
 		
 		//TODO needed to check, another test cas if the model is setted!
 		std::vector<double> calculatedData = linearModel.calculateData(x_ptr);
-		double error = linearModel.calculateError(y_ptr, calculatedData);
-		double secondError = linearModel.calculateError(y1_ptr, calculatedData);
+		linearModel.calculateError(y_ptr, calculatedData);
+		double error = linearModel.getError();
+		linearModel.calculateError(y1_ptr, calculatedData);
+		double secondError = linearModel.getError();
 		EXPECT_EQ(calculatedData, y);
 		EXPECT_EQ(error, 0);
 		EXPECT_NEAR(secondError, trueError, 0.0001);

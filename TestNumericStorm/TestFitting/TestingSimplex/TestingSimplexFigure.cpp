@@ -119,7 +119,7 @@ TEST_F(TestignSettingAndExecutingModel, checkingErrorModel)
 	simplexFigure.setMotherCharacteristic(trueYVectorPointer);
 	simplexFigure.setArgumentsToCalculatingData(xVectorPointer);
 
-	simplexFigure.calculateErrors();
+	simplexFigure.calculateErrors(); //! <- later on probably private, from API will be avalialbe sort method
 
 };
 //TEST_F(TestignSettingAndExecutingModel, checkingDataModel) {};

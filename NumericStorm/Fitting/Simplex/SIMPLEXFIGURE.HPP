@@ -51,9 +51,14 @@ public:
         };
     void sort(bool reverseMinToMax = false)
         {
+
+
         if (m_dataModelSet == false || m_errorModelSet == false)
+            //TODO extract this functionality to other one more method
             throw NoSettedModelExeption(m_dataModelSet,m_errorModelSet);
-        
+
+        //todo add callcing calculating the error function, probably extract this whole behaviour to    another function, and check only necessery conditions
+
         std::sort(m_points.begin(), m_points.end());
         if (reverseMinToMax)
             std::reverse(m_points.begin(), m_points.end());
@@ -81,14 +86,16 @@ public:
     void setArgumentsToCalculatingData(vectorPointer argumentsToCalculatingModel) 
         {m_argumentsToCalculatingCharacteristic = argumentsToCalculatingModel;}
     
-    void calculateErrors() 
-    { 
-        // this variable is used because calculateError return double 
-        // and modify internal stage of point, i neeed to store somewhere this data
-        double currentError;
-        for (auto item : m_points)
-            currentError= m_points[i].calculateError();
+    void calculateErrors()
+    //TODO set this method as private, it will be call in sort method
+    { //TODO needed copy/move mother characteristic, becase of performance and jumping on the memory
+        //for (auto item : m_points)
+        //{ 
+        //    item.calculateData();
+        //    item.calculateError();
+        //}
     }
+    
 private:
     std::array<SimplexPointType, s_p> m_points;
     SimplexPointType m_centroid;
@@ -96,6 +103,8 @@ private:
     vectorPointer m_argumentsToCalculatingCharacteristic;
     bool m_dataModelSet;
     bool m_errorModelSet;
+
+    // void caculateError(){} 
 
     };
 
