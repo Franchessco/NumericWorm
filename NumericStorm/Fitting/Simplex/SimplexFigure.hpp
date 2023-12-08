@@ -57,7 +57,7 @@ public:
             //TODO extract this functionality to other one more method
             throw NoSettedModelExeption(m_dataModelSet,m_errorModelSet);
 
-        //todo add callcing calculating the error function, probably extract this whole behaviour to    another function, and check only necessery conditions
+        //todo add callcing calculating the error function, probably extract this whole behaviour into another function, and check only necessery conditions
 
         std::sort(m_points.begin(), m_points.end());
         if (reverseMinToMax)
@@ -87,13 +87,15 @@ public:
         {m_argumentsToCalculatingCharacteristic = argumentsToCalculatingModel;}
     
     void calculateErrors()
-    //TODO set this method as private, it will be call in sort method
+    //TODO set this method as private, it could be call in sort method
     { //TODO needed copy/move mother characteristic, becase of performance and jumping on the memory
-        //for (auto item : m_points)
-        //{ 
-        //    item.calculateData();
-        //    item.calculateError();
-        //}
+        for (int i =0; i<s_p;i++)
+        { 
+            std::vector<T_d> characteristicByMyPoint = m_points[i].calculateData(m_argumentsToCalculatingCharacteristic);
+            m_points[i].calculateError(m_motherCharacteristicPtr,characteristicByMyPoint);
+            std::cout << &m_points[i] << std::endl;
+
+        }
     }
     
 private:

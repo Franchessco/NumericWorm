@@ -1,5 +1,5 @@
 #include "pch.h"
-
+#include <memory>
 
 using namespace NumericStorm::Fitting;
 namespace TestingSimplexFigure
@@ -22,10 +22,13 @@ using vectorPointer = std::shared_ptr<std::vector<double>>;
 
 std::vector<double> modelOfLine(const vectorPointer x, Parameters<2> arguments) 
 	{
-		size_t s = (*x).size();
-		std::vector<double> y; y.resize(s);
-		for (size_t i = 0; i < s; ++i)
+		int s = (*x).size();
+		std::vector<double> y; 
+		y.resize(s);
+		for (int i = 0; i < s; ++i)
+		{
 			y[i] = arguments[0] * (*x)[i] + arguments[1];
+		}
 		return y;
 	}
 
@@ -35,7 +38,10 @@ double chi2(const vectorPointer mother, const std::vector<double>& child)
 		std::vector <double> v; v.resize(s);
 
 		for (size_t i = 0; i < s; i++)
-			v[i] = std::pow(((*mother)[i] - child[i]), 2);
+		{
+			auto y = (*mother)[i] - child[i];
+			v[i] = std::pow(y,2);
+		}
 		double error = std::accumulate(v.begin(), v.end(), 0.0);
 		return error;
 	};
@@ -111,16 +117,22 @@ struct TestignSettingAndExecutingModel : public testing::Test
 	model linmodel = modelOfLine;
 	ErrorModel errormodel = chi2;;
 
-	SimplexFigure<3> simplexFigure{ minBounds,maxBounds };
+	SimplexFigure<3> simplexfigure{ minBounds,maxBounds };
 };
 TEST_F(TestignSettingAndExecutingModel, checkingErrorModel)
 {
-	simplexFigure.setModels(linmodel, errormodel);
-	simplexFigure.setMotherCharacteristic(trueYVectorPointer);
-	simplexFigure.setArgumentsToCalculatingData(xVectorPointer);
-
-	simplexFigure.calculateErrors(); //! <- later on probably private, from API will be avalialbe sort method
-
+	std::vector<double> trueErrorValues{ 22.5,	22.5,	202.5};
+	simplexfigure.setModels(linmodel, errormodel);
+	simplexfigure.setMotherCharacteristic(trueYVectorPointer);
+	simplexfigure.setArgumentsToCalculatingData(xVectorPointer);
+	for (int i = 0; i < 3; i++)
+		std::cout << std::addressof(simplexfigure[i]) << std::endl;
+	simplexfigure.calculateErrors(); //! <- later on probably private, from API will be avalialbe sort method
+	for (int i = 0; i < 3; i++)
+	{
+		double calculatedError = simplexfigure[i].getError();
+		EXPECT_DOUBLE_EQ(calculatedError, trueErrorValues[i],0.1);
+	}
 };
 //TEST_F(TestignSettingAndExecutingModel, checkingDataModel) {};
 //TEST_F(TestignSettingAndExecutingModel, checkingSortingVertex) {};

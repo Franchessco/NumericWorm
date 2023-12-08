@@ -8,8 +8,7 @@ namespace Fitting
 {
 
 template <size_t s_p, typename T_p = double>
-class Parameters
-{
+class Parameters{
 public:
 	template<class ... Args>
 	Parameters(Args... args)
