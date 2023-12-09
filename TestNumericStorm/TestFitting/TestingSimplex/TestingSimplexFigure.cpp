@@ -136,6 +136,93 @@ TEST_F(TestignSettingAndExecutingModel, checkingErrorModel)
 //TEST_F(TestignSettingAndExecutingModel, checkingDataModel) {};
 //TEST_F(TestignSettingAndExecutingModel, checkingSortingVertex) {};
 //TODO: create tests for checking exeption mother characteristic no setted and arguments to calculating child characteristic
+TEST_F(TestignSettingAndExecutingModel, testingSorting) 
+{
+	//TODO task for later, add test when each point has seperate value 
+	
+	simplexfigure.setModels(linmodel, errormodel);
+	simplexfigure.setMotherCharacteristic(trueYVectorPointer);
+	simplexfigure.setArgumentsToCalculatingData(xVectorPointer);
+
+	simplexfigure.calculateErrors();
+	simplexfigure.sort(true);
+	double trueSortedOrderCoefficient[3] = {3,2,1};
+	
+	for (int i = 0; i < 3; i++)
+	{
+		auto p = trueSortedOrderCoefficient[i];
+		SimplexPoint<2> truePoint{ p,p };
+		EXPECT_EQ(simplexfigure[i], truePoint);
+	}
+
+
+};
+
+struct TestingSimpleOperationOnSimplexFigure :public testing::Test{
+	std::vector<double> xVector{ 1, 2, 3, 4, 5 };
+	SimplexPoint<2> truePoint{ 1.5, 1.5 };
+	std::vector<double> yVector{ 3, 4.5, 6, 7.5, 9 };
+	vectorPointer xVectorPointer = std::make_unique<std::vector<double>>(xVector);
+	vectorPointer trueYVectorPointer = std::make_unique<std::vector<double>>(yVector);
+
+	Bounds<2> minBounds{ 1, 1 };
+	Bounds<2> maxBounds{ 3, 3 };
+	model linmodel = modelOfLine;
+	ErrorModel errormodel = chi2;
+	SimplexFigure<3> simplexFigure{ minBounds, maxBounds };
+	
+	void SetUp()  
+	{
+		simplexFigure.setModels(linmodel, errormodel);
+		simplexFigure.setMotherCharacteristic(trueYVectorPointer);
+		simplexFigure.setArgumentsToCalculatingData(xVectorPointer);
+		simplexFigure.calculateErrors();
+	}
+};
+TEST_F(TestingSimpleOperationOnSimplexFigure, testingAddingPointIntoSimplex) 
+{
+	SimplexPoint<2> pointToAdd{ 1.5,1.5 };
+	simplexFigure.addPoint(pointToAdd);
+	
+	EXPECT_EQ(pointToAdd, simplexFigure[0]);
+
+}
+TEST_F(TestingSimpleOperationOnSimplexFigure, TestingReflection)
+{
+	SetUp();
+	SimplexPoint<2> reflectedPoint = simplexFigure.reflect();
+	SimplexPoint<2> trueReflectedPoint{};
+	EXPECT_EQ(reflectedPoint, trueReflectedPoint);
+
+};
+TEST_F(TestingSimpleOperationOnSimplexFigure, TestingExpansion)
+{
+	SetUp();
+	SimplexPoint<2> reflectedPoint = simplexFigure.reflect();
+	simplexFigure.addPoint(reflectedPoint);
+	SimplexPoint<2> expanedPoint = simplexFigure.expand();
+	SimplexPoint<2> trueExpanedPoint{};
+	EXPECT_EQ(expanedPoint, trueExpanedPoint);
+};
+
+TEST_F(TestingSimpleOperationOnSimplexFigure, TestingContraction)
+{
+	SetUp();
+	SimplexPoint<2> reflectedPoint = simplexFigure.reflect();
+	simplexFigure.addPoint(reflectedPoint);
+	SimplexPoint<2> contractedPoint = simplexFigure.contract();
+	SimplexPoint<2> trueContractedPoint{};
+	EXPECT_EQ(contractedPoint, trueContractedPoint);
+};
+
+TEST_F(TestingSimpleOperationOnSimplexFigure, TestingShrinking)
+{
+	SetUp();
+	std::array<SimplexPoint<2>, 2> shrikendPoints = simplexFigure.shrink();
+	std::array<SimplexPoint<2>, 2> trueShrinkedPoint{};
+	for (int i = 0; i < 2;i++)
+		EXPECT_EQ(shrikendPoints[i], trueShrinkedPoint[i]);
+};
 }
 		
 

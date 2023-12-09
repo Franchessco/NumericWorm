@@ -52,12 +52,9 @@ public:
             return centroid;
         };
     void sort(bool reverseMinToMax = false)
-        {
-
-
+    {
         IsDataAndErrorModelSetted();
-
-        //todo add callcing calculating the error function, probably extract this whole behaviour into another function, and check only necessery conditions
+        calculateErrors();
 
         std::sort(m_points.begin(), m_points.end());
         if (reverseMinToMax)
