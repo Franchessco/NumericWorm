@@ -89,11 +89,11 @@ public:
     void calculateErrors()
     //TODO set this method as private, it could be call in sort method
     { //TODO needed copy/move mother characteristic, becase of performance and jumping on the memory
-        for (int i =0; i<s_p;i++)
+        for (auto& item:m_points)
         { 
-            std::vector<T_d> characteristicByMyPoint = m_points[i].calculateData(m_argumentsToCalculatingCharacteristic);
-            m_points[i].calculateError(m_motherCharacteristicPtr,characteristicByMyPoint);
-            std::cout << &m_points[i] << std::endl;
+            std::vector<T_d> characteristicByMyPoint = item.calculateData(m_argumentsToCalculatingCharacteristic);
+            item.calculateError(m_motherCharacteristicPtr,characteristicByMyPoint);
+            std::cout << &item << std::endl;
 
         }
     }
