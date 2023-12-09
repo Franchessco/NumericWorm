@@ -4,6 +4,8 @@
 
 #include "SimplexPoint.hpp"
 #include "NoSettedModelExeption.hpp"
+#include "../ArgumentsToCalculatingCharacteristicNoSettedExeption.hpp"
+#include"../MotherCharacteristicNoSettedExeption.hpp"
 
 namespace NumericStorm 
 {
@@ -53,9 +55,7 @@ public:
         {
 
 
-        if (m_dataModelSet == false || m_errorModelSet == false)
-            //TODO extract this functionality to other one more method
-            throw NoSettedModelExeption(m_dataModelSet,m_errorModelSet);
+        IsDataAndErrorModelSetted();
 
         //todo add callcing calculating the error function, probably extract this whole behaviour into another function, and check only necessery conditions
 
@@ -87,14 +87,15 @@ public:
         {m_argumentsToCalculatingCharacteristic = argumentsToCalculatingModel;}
     
     void calculateErrors()
-    //TODO set this method as private, it could be call in sort method
-    { //TODO needed copy/move mother characteristic, becase of performance and jumping on the memory
+    {
+        IsArgumentsSetted();
+        IsMotherCharateristicSetted();
+
+        //TODO needed copy/move mother chaIsArgumentsSetted()racteristic, becase of performance and jumping on the memory
         for (auto& item:m_points)
         { 
             std::vector<T_d> characteristicByMyPoint = item.calculateData(m_argumentsToCalculatingCharacteristic);
             item.calculateError(m_motherCharacteristicPtr,characteristicByMyPoint);
-            std::cout << &item << std::endl;
-
         }
     }
     
@@ -106,9 +107,23 @@ private:
     bool m_dataModelSet;
     bool m_errorModelSet;
 
-    // void caculateError(){} 
+    void IsDataAndErrorModelSetted()
+    {
+    if (m_dataModelSet == false || m_errorModelSet == false)
+        throw NoSettedModelExeption(m_dataModelSet, m_errorModelSet);
+    }
+    void IsArgumentsSetted() 
+    {
+        if (m_argumentsToCalculatingCharacteristic == nullptr)
+            throw ArgumentsToCalculatingCharacteristicNoSettedExeption();
+    }
+    void IsMotherCharateristicSetted() 
+    {
+        if (m_motherCharacteristicPtr == nullptr)
+            throw MotherCharacteristicNoSettedExeption();
+    }
 
-    };
+};
 
 }
 }

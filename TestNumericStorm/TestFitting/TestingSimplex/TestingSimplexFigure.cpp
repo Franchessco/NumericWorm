@@ -98,6 +98,7 @@ TEST_F(TestignSettingAndExecutingModelThrowingAnError, TestThrowErrorDataModelsN
 
 struct TestignSettingAndExecutingModel : public testing::Test
 {
+
 	std::vector<double> xVector{1,2,3,4,5};
 	SimplexPoint<2> truePoint{ 1.5,1.5 };
 	std::vector<double> yVector{ 3,4.5,6,7.5,9};
@@ -116,7 +117,6 @@ struct TestignSettingAndExecutingModel : public testing::Test
 	Bounds<2> maxBounds{ 3,3 };
 	model linmodel = modelOfLine;
 	ErrorModel errormodel = chi2;;
-
 	SimplexFigure<3> simplexfigure{ minBounds,maxBounds };
 };
 TEST_F(TestignSettingAndExecutingModel, checkingErrorModel)
@@ -125,8 +125,7 @@ TEST_F(TestignSettingAndExecutingModel, checkingErrorModel)
 	simplexfigure.setModels(linmodel, errormodel);
 	simplexfigure.setMotherCharacteristic(trueYVectorPointer);
 	simplexfigure.setArgumentsToCalculatingData(xVectorPointer);
-	for (int i = 0; i < 3; i++)
-		std::cout << std::addressof(simplexfigure[i]) << std::endl;
+
 	simplexfigure.calculateErrors(); //! <- later on probably private, from API will be avalialbe sort method
 	for (int i = 0; i < 3; i++)
 	{
@@ -136,6 +135,7 @@ TEST_F(TestignSettingAndExecutingModel, checkingErrorModel)
 };
 //TEST_F(TestignSettingAndExecutingModel, checkingDataModel) {};
 //TEST_F(TestignSettingAndExecutingModel, checkingSortingVertex) {};
+//TODO: create tests for checking exeption mother characteristic no setted and arguments to calculating child characteristic
 }
 		
 

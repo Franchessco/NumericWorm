@@ -147,8 +147,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Fitting\ArgumentsToCalculatingCharacteristicNoSettedExeption.hpp" />
     <ClInclude Include="Fitting\Bounds.hpp" />
     <ClInclude Include="Fitting\Fitting.hpp" />
+    <ClInclude Include="Fitting\MotherCharacteristicNoSettedExeption.hpp" />
     <ClInclude Include="Fitting\Parameters.hpp" />
     <ClInclude Include="Data.hpp" />
     <ClInclude Include="Fitting\Simplex\NoSettedModelExeption.hpp" />
