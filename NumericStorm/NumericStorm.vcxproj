@@ -153,9 +153,11 @@
     <ClInclude Include="Fitting\MotherCharacteristicNoSettedExeption.hpp" />
     <ClInclude Include="Fitting\Parameters.hpp" />
     <ClInclude Include="Data.hpp" />
+    <ClInclude Include="Fitting\MethodParameters.hpp" />
     <ClInclude Include="Fitting\Simplex\NoSettedModelExeption.hpp" />
     <ClInclude Include="Fitting\Simplex\SimpleSimplex\SimpleSimplex.hpp" />
     <ClInclude Include="Fitting\Simplex\SimplexFigure.hpp" />
+    <ClInclude Include="Fitting\Simplex\SimplexParameters.hpp" />
     <ClInclude Include="Fitting\Simplex\SimplexPoint.hpp" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="NumericStorm.hpp" />

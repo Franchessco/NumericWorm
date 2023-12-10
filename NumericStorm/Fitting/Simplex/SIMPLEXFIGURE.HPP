@@ -4,6 +4,7 @@
 
 #include "SimplexPoint.hpp"
 #include "NoSettedModelExeption.hpp"
+#include "SimplexParameters.hpp"
 #include "../ArgumentsToCalculatingCharacteristicNoSettedExeption.hpp"
 #include"../MotherCharacteristicNoSettedExeption.hpp"
 
@@ -95,13 +96,48 @@ public:
             item.calculateError(m_motherCharacteristicPtr,characteristicByMyPoint);
         }
     }
-    
+    void addPoint(SimplexPointType pointToAdd) 
+    {m_proposalPoint = pointToAdd;}
+
+    SimplexPointType reflect() 
+    { 
+        SimplexPointType reflectedPoint;
+        double alpha = m_simplexParameters.getAlpha();
+        reflectedPoint = m_centroid + alpha * (m_centroid - m_points[0]);
+        return reflectedPoint;
+    };
+    SimplexPointType expand() { 
+        SimplexPointType expandedPoint;
+        double gamma = m_simplexParameters.getGamma();
+        expandedPoint = m_centroid + gamma * (m_proposalPoint - m_centroid);
+        return expandedPoint;
+    };
+    SimplexPointType contract() 
+    { 
+        SimplexPointType contractedPoint; 
+        SimplexPointType pointToContraction = decidePointToContraction();
+        double beta = m_simplexParameters.getBeta();
+        contractedPoint = m_centroid + beta * (pointToContraction - m_centroid);
+        return contractedPoint;
+    };
+    std::vector<SimplexPointType> shrink() 
+    { 
+        std::vector<SimplexPointType> shrinkedPoints;
+        shrinkedPoints.resize(s_b);
+        double delta = m_simplexParameters.getDelta();
+        for (int i = 0; i < s_b ; i++)
+            shrinkedPoints[i] =  m_points[0] + delta*(m_points[i] - m_points[0]);
+        return shrinkedPoints;
+    };
+    void setSimplexParameters(SimplexFigureParameters newFigureParameters) {}
 private:
     std::array<SimplexPointType, s_p> m_points;
+    SimplexPointType m_proposalPoint;
     SimplexPointType m_centroid;
     vectorPointer m_motherCharacteristicPtr;
     vectorPointer m_argumentsToCalculatingCharacteristic;
     bool m_dataModelSet;
+    SimplexFigureParameters m_simplexParameters;
     bool m_errorModelSet;
 
     void IsDataAndErrorModelSetted()
@@ -120,6 +156,12 @@ private:
             throw MotherCharacteristicNoSettedExeption();
     }
 
+    SimplexPointType decidePointToContraction()
+    {
+        if (m_proposalPoint < m_points[s_p])
+            return m_proposalPoint;
+        return m_points[s_p];
+    }
 };
 
 }

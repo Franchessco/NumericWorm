@@ -54,6 +54,12 @@
     <ClInclude Include="Fitting\MotherCharacteristicNoSettedExeption.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Fitting\MethodParameters.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fitting\Simplex\SimplexParameters.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NumericStorm.cpp">

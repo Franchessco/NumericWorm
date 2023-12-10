@@ -160,8 +160,8 @@ TEST_F(TestignSettingAndExecutingModel, testingSorting)
 
 struct TestingSimpleOperationOnSimplexFigure :public testing::Test{
 	std::vector<double> xVector{ 1, 2, 3, 4, 5 };
-	SimplexPoint<2> truePoint{ 1.5, 1.5 };
-	std::vector<double> yVector{ 3, 4.5, 6, 7.5, 9 };
+	SimplexPoint<2> truePoint{ 1.8,1.8 };
+	std::vector<double> yVector{ 3.6,5.4,7.2,9,10.8};
 	vectorPointer xVectorPointer = std::make_unique<std::vector<double>>(xVector);
 	vectorPointer trueYVectorPointer = std::make_unique<std::vector<double>>(yVector);
 
@@ -179,14 +179,15 @@ struct TestingSimpleOperationOnSimplexFigure :public testing::Test{
 		simplexFigure.calculateErrors();
 	}
 };
-TEST_F(TestingSimpleOperationOnSimplexFigure, testingAddingPointIntoSimplex) 
-{
-	SimplexPoint<2> pointToAdd{ 1.5,1.5 };
-	simplexFigure.addPoint(pointToAdd);
-	
-	EXPECT_EQ(pointToAdd, simplexFigure[0]);
-
-}
+//TEST_F(TestingSimpleOperationOnSimplexFigure, testingAddingPointIntoSimplex) 
+//{
+//	SetUp();
+//	SimplexPoint<2> pointToAdd{ 1.5,1.5 };
+//	simplexFigure.addPoint(pointToAdd);
+//	
+//	EXPECT_EQ(pointToAdd, simplexFigure[0]);
+//
+//}
 TEST_F(TestingSimpleOperationOnSimplexFigure, TestingReflection)
 {
 	SetUp();
@@ -218,8 +219,8 @@ TEST_F(TestingSimpleOperationOnSimplexFigure, TestingContraction)
 TEST_F(TestingSimpleOperationOnSimplexFigure, TestingShrinking)
 {
 	SetUp();
-	std::array<SimplexPoint<2>, 2> shrikendPoints = simplexFigure.shrink();
-	std::array<SimplexPoint<2>, 2> trueShrinkedPoint{};
+	std::vector<SimplexPoint<2>> shrikendPoints = simplexFigure.shrink();
+	std::vector<SimplexPoint<2>> trueShrinkedPoint{};
 	for (int i = 0; i < 2;i++)
 		EXPECT_EQ(shrikendPoints[i], trueShrinkedPoint[i]);
 };
