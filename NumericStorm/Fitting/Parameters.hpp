@@ -12,8 +12,7 @@ class Parameters{
 public:
 	template<class ... Args>
 	Parameters(Args... args)
-		:m_parameters{ (T_p)args... }
-	{}
+		:m_parameters{ (T_p)args... } {}
 
 	Parameters(std::array<T_p, s_p> parameters)
 		:m_parameters(parameters) {}

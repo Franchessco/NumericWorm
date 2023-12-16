@@ -101,35 +101,49 @@ public:
 
     SimplexPointType reflect() 
     { 
-        SimplexPointType reflectedPoint;
+        SimplexPointType reflectedPoint{m_points[0]};
         double alpha = m_simplexParameters.getAlpha();
-        reflectedPoint = m_centroid + alpha * (m_centroid - m_points[0]);
+        reflectedPoint = m_centroid + (m_centroid - m_points[0])* alpha;
+        
         return reflectedPoint;
     };
-    SimplexPointType expand() { 
-        SimplexPointType expandedPoint;
+    SimplexPointType expand() 
+    { 
+        SimplexPointType expandedPoint{ m_points[0] };
         double gamma = m_simplexParameters.getGamma();
-        expandedPoint = m_centroid + gamma * (m_proposalPoint - m_centroid);
+        expandedPoint = m_centroid + (m_proposalPoint - m_centroid) * gamma;
+
         return expandedPoint;
     };
     SimplexPointType contract() 
     { 
-        SimplexPointType contractedPoint; 
+        SimplexPointType contractedPoint{ m_points[0] };
+
         SimplexPointType pointToContraction = decidePointToContraction();
         double beta = m_simplexParameters.getBeta();
-        contractedPoint = m_centroid + beta * (pointToContraction - m_centroid);
+        auto vector = pointToContraction - m_centroid;
+        vector *= beta;
+        contractedPoint = m_centroid + vector;
         return contractedPoint;
     };
     std::vector<SimplexPointType> shrink() 
     { 
+        auto bestPoint = m_points[s_b];
         std::vector<SimplexPointType> shrinkedPoints;
-        shrinkedPoints.resize(s_b);
+        for (int i = 0; i < s_b; i++)
+            shrinkedPoints.push_back(bestPoint);
         double delta = m_simplexParameters.getDelta();
+        
         for (int i = 0; i < s_b ; i++)
-            shrinkedPoints[i] =  m_points[0] + delta*(m_points[i] - m_points[0]);
+        {
+            auto p = (m_points[i] - bestPoint) * delta;
+            shrinkedPoints[i] += p;
+        }
+            /*bestPoint + (m_points[i] - bestPoint)*delta;*/
+
         return shrinkedPoints;
     };
-    void setSimplexParameters(SimplexFigureParameters newFigureParameters) {}
+    void setSimplexParameters(SimplexFigureParameters newFigureParameters) { m_simplexParameters = newFigureParameters; }
 private:
     std::array<SimplexPointType, s_p> m_points;
     SimplexPointType m_proposalPoint;
@@ -158,9 +172,9 @@ private:
 
     SimplexPointType decidePointToContraction()
     {
-        if (m_proposalPoint < m_points[s_p])
+        if (m_proposalPoint < m_points[s_p-1])
             return m_proposalPoint;
-        return m_points[s_p];
+        return m_points[s_p-1];
     }
 };
 
