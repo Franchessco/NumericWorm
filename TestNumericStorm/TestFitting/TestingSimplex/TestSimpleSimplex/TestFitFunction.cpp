@@ -45,10 +45,10 @@ TEST(TestFitFunction, FitFunction)
 
 	// arguments to calculating data
 	std::vector<double> myInputData;
-	myInputData.resize(200);
+	myInputData.resize(10);
 
-	double currectX = -10; double step = 0.5;
-	for (size_t i = 0; i < 200; i++)
+	double currectX = -5; double step = 0.25;
+	for (size_t i = 0; i < 10; i++)
 	{
 		myInputData[i] = currectX;
 		currectX += step;
@@ -62,7 +62,7 @@ TEST(TestFitFunction, FitFunction)
 	SimplexFigureParameters mySimplexParameters{1,0.5,2,0.5};
 	simpleSimplexFitter.setUp(trueData_ptr, myInpuntData_ptr, myModel, chi2, mySimplexParameters);
 
-	auto fittedParameters = simpleSimplexFitter.fit(0.1, 100);
+	auto fittedParameters = simpleSimplexFitter.fit(0.01, 1000);
 	for (size_t i = 0; i < 4; ++i) {
 		EXPECT_NEAR(fittedParameters[i], trueParameters[i], 0.1);
 	}

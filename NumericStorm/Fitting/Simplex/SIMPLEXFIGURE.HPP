@@ -167,9 +167,9 @@ public:
         
 
         if (expantionDecision(expandedPoint))
-            m_points[0] = expandedPoint;
+            {m_points[0] = expandedPoint;return;}
         else if (contractionDecision())
-            m_points[0] = contractedPoint;
+            {m_points[0] = contractedPoint;return;}
         else
         {
             //TODO later on we need to change this code to be more readable, probably we want to use zip() funciton 

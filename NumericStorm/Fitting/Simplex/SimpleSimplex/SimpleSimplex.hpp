@@ -58,7 +58,9 @@ public:
 private:
 	SimplexFigureType simplexFigure;
 	bool checkTerminationconditions(double bestError,double maxError, unsigned int iterations,unsigned int maxIterations)
-		{return (bestError > maxError) || (iterations > maxIterations);}
+	{
+		return !((bestError > maxError) or (iterations > maxIterations));
+	}
 
 };
 
