@@ -19,8 +19,14 @@ public:
         :Parameters<s_p, T_p>(args...), m_error(0), m_model(nullptr), m_errorModel(nullptr) {};
 
     SimplexPoint<s_p, T_p, T_d>(std::array<T_p, s_p> parameters)
-        :Parameters<T_p, s_p>(parameters), m_error(0), m_model(nullptr),  m_errorModel(nullptr) {};
-
+        :Parameters<s_p,T_p>(parameters), m_error(0), m_model(nullptr),  m_errorModel(nullptr) {};
+    SimplexPoint<s_p, T_p, T_d>(const SimplexPoint<s_p, T_p, T_d>& other)
+    :Parameters<s_p, T_p>(other.getParameters())
+    {
+        m_error = 0;
+        m_model = other.m_model;
+        m_errorModel = other.m_errorModel;
+    }
 
     //template <typename T_d=double>
 
@@ -43,31 +49,40 @@ public:
         double error = m_errorModel(mother, child);
         this->m_error = error;
     }
-
-    public:
-        inline void setDataModel(model modelToSet) { m_model = modelToSet; }
-        inline void setErrorModel(ErrorModel modelToSet) { m_errorModel = modelToSet; }
-        inline double getError() 
+    inline void setDataModel(model modelToSet) { m_model = modelToSet; }
+    inline void setErrorModel(ErrorModel modelToSet) { m_errorModel = modelToSet; }
+    inline double getError() 
         { 
             return m_error; 
         }
 
-        void setToBounds(const Bounds<s_p, T_p> minBounds, const Bounds<s_p, T_p> maxBounds)
+    void setToBounds(const Bounds<s_p, T_p> minBounds, const Bounds<s_p, T_p> maxBounds)
         {
             setToMinBounds(minBounds);
             setToMaxBounds(maxBounds);
         }
 
-        auto operator <=> (const SimplexPoint<s_p, T_p, T_d>& other) const 
+    auto operator <=> (const SimplexPoint<s_p, T_p, T_d>& other) const 
             {return m_error <=> other.m_error;}
-    private:
-        void setToMinBounds(const Bounds<s_p, T_p> minBounds)
+    SimplexPoint<s_p, T_p, T_d>& operator = (Parameters<s_p, T_p>& other ) 
+    {
+        if (this == other) return *this;
+
+        for (size_t i = 0; i < s_p; i++)
+            *this -> m_parameters[i] += other[i];
+        //TODO make this more clear -> write getters for this function pointer
+        setDataModel(other.m_model);
+        setErrorModel(other.m_errorModel);
+        return *this;
+    }
+private:
+    void setToMinBounds(const Bounds<s_p, T_p> minBounds)
         {
             for (int i = 0; i < s_p; i++)
                 if (this->m_parameters[i] < minBounds[i])
                     this->m_parameters[i] = minBounds[i];
         }
-        void setToMaxBounds(const Bounds<s_p, T_p> maxBounds)
+    void setToMaxBounds(const Bounds<s_p, T_p> maxBounds)
         {
             for (int i = 0; i < s_p; i++)
                 if (this->m_parameters[i] > maxBounds[i])

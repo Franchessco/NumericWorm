@@ -20,6 +20,7 @@ int main()
 		std::cout << x;
 		
 
+	//inicjalizacja UI
 	
 	//SimpleSimplex solver{};
 	//solver.setModel(GaussianModel);

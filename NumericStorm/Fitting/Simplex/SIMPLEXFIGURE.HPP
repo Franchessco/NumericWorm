@@ -38,10 +38,10 @@ public:
     std::array<SimplexPointType, s_p> getPoints() { return m_points; }
 
     SimplexPointType& operator[](int index)
-        {
-            if (index >= s_p) { return m_points[0]; }
-            return m_points[index];
-        }
+    {
+        if (index >= s_p) { return m_points[0]; }
+        return m_points[index];
+    }
 
     inline SimplexPointType getCentroid() {return m_centroid;}
     SimplexPointType calculateCentroid() 
@@ -67,6 +67,7 @@ public:
         setDataModel(dataModel); setErrorModel(errorModel); 
         m_dataModelSet = true; m_errorModelSet = true;
     }
+    //TODO set dataModel and setErrorModel should be private!
     void setDataModel(model modelToSet) 
     {
         for(int i=0; i <s_p;i++)
@@ -115,15 +116,14 @@ public:
 
         return expandedPoint;
     };
-    SimplexPointType contract() 
+    SimplexPointType contract()
     { 
+        SimplexPointType pointToContraction = decidePointToContraction();
         SimplexPointType contractedPoint{ m_points[0] };
 
-        SimplexPointType pointToContraction = decidePointToContraction();
         double beta = m_simplexParameters.getBeta();
-        auto vector = pointToContraction - m_centroid;
-        vector *= beta;
-        contractedPoint = m_centroid + vector;
+        contractedPoint = m_centroid + (pointToContraction - m_centroid)*beta;
+
         return contractedPoint;
     };
     std::vector<SimplexPointType> shrink() 
@@ -144,6 +144,30 @@ public:
         return shrinkedPoints;
     };
     void setSimplexParameters(SimplexFigureParameters newFigureParameters) { m_simplexParameters = newFigureParameters; }
+
+    SimplexPointType decidePointToContraction()
+    {
+        if (m_proposalPoint < m_points[s_p-1])
+            return m_proposalPoint;
+        return m_points[s_p-1];
+    }
+
+    void doOperation(SimplexPointType expandedPoint, SimplexPointType contractedPoint) 
+    {
+        
+
+        if (expantionDecision(expandedPoint))
+            m_points[0] = expandedPoint;
+        else if (contractionDecision())
+            m_points[0] = contractedPoint;
+        else
+        {
+            //TODO later on we need to change this code to be more readable, probably we want to use zip() funciton 
+            std::vector<SimplexPointType> shrinkedPoints = shrink();
+            for (int i = 0; i < s_b; i++)
+                m_points[i] = shrinkedPoints[i];
+        }
+    }
 private:
     std::array<SimplexPointType, s_p> m_points;
     SimplexPointType m_proposalPoint;
@@ -170,11 +194,18 @@ private:
             throw MotherCharacteristicNoSettedExeption();
     }
 
-    SimplexPointType decidePointToContraction()
+    bool expantionDecision(SimplexPointType expandedPoint) 
     {
-        if (m_proposalPoint < m_points[s_p-1])
-            return m_proposalPoint;
-        return m_points[s_p-1];
+        bool firstCondition = (expandedPoint < m_proposalPoint) && (m_proposalPoint < m_points[s_p -1]);
+        bool secondCondition = (expandedPoint<m_points[s_p-2]) && (m_proposalPoint < m_points[s_p-1]);
+        return firstCondition || secondCondition;
+    }
+    bool contractionDecision()
+    {
+        if (m_proposalPoint >= m_points[s_p-2])
+            return true;
+        else
+            return false;
     }
 };
 
