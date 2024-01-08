@@ -14,7 +14,7 @@ class SimpleSimplex
 
 	using vectorPointer = std::shared_ptr<std::vector<T_d>>;
 
-	using model = std::vector<double>(*)(vectorPointer args, Parameters<4> param);
+	using model = std::vector<double>(*)(vectorPointer args, Parameters<s_b> param);
 	using ErrorModel = double(*)(const vectorPointer mother, const std::vector<double>&child);
 
 public:
@@ -41,6 +41,7 @@ public:
 
 		while (checkTerminationconditions(bestError, maxError, iterations, maxIterations)) 
 		{
+			simplexFigure.calculateCentroid();
 			SimplexPointType reflectedPoint = simplexFigure.reflect();
 			simplexFigure.addPoint(reflectedPoint);
 			SimplexPointType expandedPoint = simplexFigure.expand();

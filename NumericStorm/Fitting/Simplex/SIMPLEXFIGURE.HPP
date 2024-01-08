@@ -20,7 +20,7 @@ public:
     using BoundsType = Bounds<s_b, T_p>;
     using vectorPointer = std::shared_ptr<std::vector<T_d>>;
 
-    using model = std::vector<double>(*)(vectorPointer args, Parameters<2> param);
+    using model = std::vector<double>(*)(vectorPointer args, Parameters<s_b> param);
     using ErrorModel = double(*)(const vectorPointer mother, const std::vector<double>& child);
 
     SimplexFigure(BoundsType minBounds, BoundsType maxBounds)
@@ -46,12 +46,23 @@ public:
     inline SimplexPointType getCentroid() {return m_centroid;}
     SimplexPointType calculateCentroid() 
         {
-            SimplexPointType centroid;
-            for (int i = 0; i <= s_b; i++)
+        SimplexPointType centroid{m_points[0]};
+            for (int i = 1; i <= s_b; i++)
                 centroid += m_points[i];
             centroid /= s_p;
+            m_centroid = centroid;
             return centroid;
         };
+
+    SimplexPointType mycomparator(const SimplexPointType& a, const SimplexPointType& b) const
+    {
+        if (a.getError() > b.getError())
+            return a;
+        else //if (a.getError() < b.getError())
+            return b;
+        //else
+        //    return -1;
+    }
     void sort(bool reverseMinToMax = false)
     {
         IsDataAndErrorModelSetted();
@@ -61,7 +72,6 @@ public:
         if (reverseMinToMax)
             std::reverse(m_points.begin(), m_points.end());
         }
-
     void setModels(model dataModel, ErrorModel errorModel) 
     {
         setDataModel(dataModel); setErrorModel(errorModel); 
@@ -102,27 +112,27 @@ public:
 
     SimplexPointType reflect() 
     { 
-        SimplexPointType reflectedPoint{m_points[0]};
+        SimplexPointType reflectedPoint{m_centroid};
         double alpha = m_simplexParameters.getAlpha();
-        reflectedPoint = m_centroid + (m_centroid - m_points[0])* alpha;
+        reflectedPoint += (m_centroid - m_points[0])* alpha;
         
         return reflectedPoint;
     };
     SimplexPointType expand() 
     { 
-        SimplexPointType expandedPoint{ m_points[0] };
+        SimplexPointType expandedPoint{ m_centroid };
         double gamma = m_simplexParameters.getGamma();
-        expandedPoint = m_centroid + (m_proposalPoint - m_centroid) * gamma;
+        expandedPoint += (m_proposalPoint - m_centroid) * gamma;
 
         return expandedPoint;
     };
     SimplexPointType contract()
     { 
         SimplexPointType pointToContraction = decidePointToContraction();
-        SimplexPointType contractedPoint{ m_points[0] };
+        SimplexPointType contractedPoint{ m_centroid };
 
         double beta = m_simplexParameters.getBeta();
-        contractedPoint = m_centroid + (pointToContraction - m_centroid)*beta;
+        contractedPoint += (pointToContraction - m_centroid)*beta;
 
         return contractedPoint;
     };

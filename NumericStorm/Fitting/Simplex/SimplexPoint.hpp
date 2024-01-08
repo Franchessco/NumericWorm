@@ -23,9 +23,9 @@ public:
     SimplexPoint<s_p, T_p, T_d>(const SimplexPoint<s_p, T_p, T_d>& other)
     :Parameters<s_p, T_p>(other.getParameters())
     {
-        m_error = 0;
-        m_model = other.m_model;
-        m_errorModel = other.m_errorModel;
+        m_error = *&other.m_error;
+        m_model = *&other.m_model;
+        m_errorModel = *&other.m_errorModel;
     }
 
     //template <typename T_d=double>
@@ -51,7 +51,7 @@ public:
     }
     inline void setDataModel(model modelToSet) { m_model = modelToSet; }
     inline void setErrorModel(ErrorModel modelToSet) { m_errorModel = modelToSet; }
-    inline double getError() 
+    inline double getError()const 
         { 
             return m_error; 
         }
@@ -75,16 +75,28 @@ public:
         setErrorModel(other.m_errorModel);
         return *this;
     }
+    ErrorModel getErrorModel()const  { return m_errorModel; }
+    model getDataModel()const { return m_model; }
+    SimplexPoint<s_p,T_p,T_d>& operator = (const SimplexPoint<s_p,T_p,T_d>& other) 
+    {
+        if (this == &other)
+            return *this;
+        this->m_parameters = other.getParameters();
+        m_error = other.getError();
+        this -> m_model = other.getDataModel();
+        this -> m_errorModel = other.getErrorModel();
+        return *this;
+    }
 private:
     void setToMinBounds(const Bounds<s_p, T_p> minBounds)
         {
-            for (int i = 0; i < s_p; i++)
+            for (size_t i = 0; i < s_p; i++)
                 if (this->m_parameters[i] < minBounds[i])
                     this->m_parameters[i] = minBounds[i];
         }
     void setToMaxBounds(const Bounds<s_p, T_p> maxBounds)
         {
-            for (int i = 0; i < s_p; i++)
+            for (size_t i = 0; i < s_p; i++)
                 if (this->m_parameters[i] > maxBounds[i])
                     this->m_parameters[i] = maxBounds[i];
         }
