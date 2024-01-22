@@ -87,6 +87,16 @@ public:
         this -> m_errorModel = other.getErrorModel();
         return *this;
     }
+
+
+    std::string presentParameters() 
+    {
+    std::string toReturn;
+    for (int i = 0; i < s_p; i++)
+        toReturn += std::to_string(i) + ": " + std::to_string(this->m_parameters[i]) + "    ";
+    
+    return toReturn;
+    }
 private:
     void setToMinBounds(const Bounds<s_p, T_p> minBounds)
         {

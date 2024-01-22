@@ -39,16 +39,16 @@ std::vector <double> MyModel(vectorPointer x, Parameters<4> param)
 }
 TEST(TestFitFunction, FitFunction) 
 {
-	Bounds<4> minBounds{ -5,-5,-5,-5 };
-	Bounds<4> maxBounds{ 20,20,20,20 };
+	Bounds<4> minBounds{ 0,-2,-5, 3};
+	Bounds<4> maxBounds{ 2,7,3,5};
 	SimpleSimplex<5> simpleSimplexFitter(minBounds,maxBounds);
 
 	// arguments to calculating data
 	std::vector<double> myInputData;
-	myInputData.resize(10);
+	myInputData.resize(20);
 
-	double currectX = -5; double step = 0.25;
-	for (size_t i = 0; i < 10; i++)
+	double currectX = 0.1; double step = 0.1;
+	for (size_t i = 0; i < 20; i++)
 	{
 		myInputData[i] = currectX;
 		currectX += step;
@@ -59,10 +59,14 @@ TEST(TestFitFunction, FitFunction)
 	std::vector<double> trueData = MyModel(myInpuntData_ptr, trueParameters);
 	vectorPointer trueData_ptr = std::make_shared<std::vector<double>>(trueData);
 	model myModel = MyModel;
-	SimplexFigureParameters mySimplexParameters{1,0.5,2,0.5};
+	// alpha 0<0.1<1
+	// beta 0<0,1<1
+	// gamma 1<0.1<2 
+	// delta 0<0,1<1
+	SimplexFigureParameters mySimplexParameters{1,1,2,1};
 	simpleSimplexFitter.setUp(trueData_ptr, myInpuntData_ptr, myModel, chi2, mySimplexParameters);
 
-	auto fittedParameters = simpleSimplexFitter.fit(0.01, 1000);
+	auto fittedParameters = simpleSimplexFitter.fit(0.01, 50);
 	for (size_t i = 0; i < 4; ++i) {
 		EXPECT_NEAR(fittedParameters[i], trueParameters[i], 0.1);
 	}

@@ -23,6 +23,10 @@ public:
 	std::array<T_p, s_p> getParameters() const
 	{return m_parameters;}
 
+
+
+
+
 	T_p& operator[](int index)
 	{
 		if (index >= s_p) { return m_parameters[0]; }

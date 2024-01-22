@@ -24,6 +24,7 @@ public:
     using ErrorModel = double(*)(const vectorPointer mother, const std::vector<double>& child);
 
     SimplexFigure(BoundsType minBounds, BoundsType maxBounds)
+        :m_minBounds(minBounds),m_maxBounds(maxBounds)
         {
             SimplexPointType step = (maxBounds - minBounds)/s_b;
             for (int i = 0; i <= s_b; i++)
@@ -178,6 +179,20 @@ public:
                 m_points[i] = shrinkedPoints[i];
         }
     }
+    inline BoundsType getMinBoudns() { return m_minBounds; }
+    inline BoundsType getMaxBoudns() { return m_maxBounds; }
+    std::string present() 
+    {
+        std::string toReturn;
+        for (auto& item : m_points)
+        {
+            toReturn += item.presentParameters();
+            toReturn += "\n";
+        }
+        toReturn += "\n";
+        return toReturn;
+    }
+    //std::array<SimplexPointType, s_p> getPoints() { return m_points; }
 private:
     std::array<SimplexPointType, s_p> m_points;
     SimplexPointType m_proposalPoint;
@@ -187,6 +202,8 @@ private:
     bool m_dataModelSet;
     SimplexFigureParameters m_simplexParameters;
     bool m_errorModelSet;
+    BoundsType m_minBounds;
+    BoundsType m_maxBounds;
 
     void IsDataAndErrorModelSetted()
     {
